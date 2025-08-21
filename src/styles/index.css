@@ -1,0 +1,39 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+@import "tailwindcss";
+
+:root {
+  --font-playfair: 'Playfair Display', serif;
+  --font-lato: 'Lato', sans-serif;
+}
+
+@theme {
+
+    --color-primary: #ee832b;   /* Verde oscuro - sobrio, natural */
+    --color-secondary: #EDE6D6; /* Beige lana - fondo cálido */
+    --color-cta: #985b2a;       /* Terracota moderno - resalta, combina con verde */
+    --color-textlight: #333333; /* Gris oscuro - tipografía */
+    --color-white: #FFFFFF;     /* Blanco */
+
+    --text-60: 60px;
+    --text-70: 70px;
+    --text-80: 80px;
+    --text-90: 90px;
+}
+
+body {
+  font-family: var(--font-lato);
+  background-color: var(--color-secondary);
+  color: var(--color-textlight);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-playfair);
+}
+
+p {
+    font-family: var(--font-lato);
+}
+
+section {
+  scroll-margin-top: 70px; /* altura de tu navbar */
+}

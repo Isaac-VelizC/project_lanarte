@@ -1,0 +1,12 @@
+# Permitir a todos los bots indexar el sitio
+User-agent: *
+Disallow: /cgi-bin/
+Disallow: /admin/
+Disallow: /private/
+Disallow: /node_modules/
+Disallow: /build/
+Disallow: /api/
+Allow: /
+
+# Sitemap
+Sitemap: https://lanarte.netlify.app/sitemap.xml
