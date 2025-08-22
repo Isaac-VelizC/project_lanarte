@@ -1,129 +1,219 @@
-import { LazyLoadImage } from "react-lazy-load-image-component";
-import imgBodySrc from "@/assets/bg/az-subtle-1920x1080.png";
 import iconUnoSrc from "@/assets/icons/icon-1.svg";
 import iconDosSrc from "@/assets/icons/icon-2.svg";
 import iconTresSrc from "@/assets/icons/icon-3.svg";
 import BadgeComponent from "@/components/BadgeComponent";
 import ServiceCard from "@/components/ServiceCard";
 import Button from "@/components/ButtonComponent";
-import { motion, type Variants } from "framer-motion";
+import { m, LazyMotion, domAnimation, type Variants } from "framer-motion";
+import { memo, useRef } from "react";
+import { badgeVariants, buttonVariants, cardVariants, containerVariants, gridVariants, paragraphVariants, sectionVariants, titleVariants } from "@/utils/AnimatesMotion";
 
-// Variants para animaciones
-const containerVariants: Variants = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.2 } },
-};
+// Componente memoizado para el contenido principal
+const ServicesContent = memo(() => {
 
-const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 40 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } },
-};
+  return (
+    <m.div
+      variants={containerVariants}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.3 }}
+      className="flex flex-col justify-center text-center lg:text-left"
+      style={{ willChange: "transform, opacity" }}
+    >
+      <m.div variants={badgeVariants}>
+        <BadgeComponent text="Nuestros servicios" />
+      </m.div>
 
-const fadeRight: Variants = {
-  hidden: { opacity: 0, x: 40 },
-  visible: { opacity: 1, x: 0, transition: { duration: 0.8, ease: "easeOut" } },
-};
+      <m.h2
+        variants={titleVariants}
+        className="mt-2 xl:mt-6 text-3xl sm:text-4xl xl:text-5xl font-extrabold leading-tight drop-shadow-xl"
+        style={{ 
+          willChange: "transform, opacity",
+          transformOrigin: "center left"
+        }}
+      >
+        Más que prendas,{" "}
+        <m.span 
+          className="text-primary"
+          initial={{ opacity: 0, scale: 0.8 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.5, type: "spring", stiffness: 200 }}
+        >
+          experiencias tejidas
+        </m.span>{" "}
+        para ti y tu familia
+      </m.h2>
+
+      <m.p
+        variants={paragraphVariants}
+        className="mt-6 max-w-xl mx-auto lg:mx-0 text-sm text-textlight/70 sm:text-base leading-relaxed opacity-90"
+        style={{ willChange: "transform, opacity, filter" }}
+      >
+        Cada servicio que ofrecemos nace del mismo propósito: llevar
+        calidez, identidad y estilo auténtico a tu vida. Ya sea un detalle
+        especial o un pedido a gran escala, lo hacemos con dedicación desde
+        Potosí.
+      </m.p>
+
+      <m.div
+        variants={buttonVariants}
+        className="hidden mt-8 sm:flex justify-center lg:justify-start"
+      >
+        <m.div
+          whileHover={{ 
+            scale: 1.05, 
+            y: -2,
+            transition: { type: "spring", stiffness: 400, damping: 10 }
+          }}
+          whileTap={{ scale: 0.95 }}
+          style={{ willChange: "transform" }}
+        >
+          <Button size="md" label="Solicitar catálogo completo">
+            Solicitar catálogo completo
+          </Button>
+        </m.div>
+      </m.div>
+    </m.div>
+  );
+});
+
+// Componente para las tarjetas de servicio
+const ServicesGrid = memo(() => {
+  const services = [
+    {
+      icon: iconTresSrc,
+      title: "Producción a Medida",
+      description: "De Uniformes a Moda en Lana",
+    },
+    {
+      icon: iconDosSrc,
+      title: "Diseño Textil Único",
+      description: "Patrones y Acabados Exclusivos",
+    },
+    {
+      icon: iconUnoSrc,
+      title: "Calidad Impecable",
+      description: "Inspección Minuciosa en Cada Prenda",
+    },
+    {
+      icon: iconUnoSrc,
+      title: "Entrega Garantizada",
+      description: "Distribución Rápida y Segura",
+    },
+  ];
+
+  return (
+    <m.div
+      variants={gridVariants}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.2 }}
+      className="grid grid-cols-1 sm:grid-cols-2 gap-3 xl:gap-8"
+    >
+      {services.map(({ icon, title, description }, i) => (
+        <m.div 
+          key={i}
+          variants={cardVariants}
+          whileHover={{
+            y: -8,
+            scale: 1.03,
+            rotateY: 2,
+            transition: {
+              type: "spring",
+              stiffness: 300,
+              damping: 20
+            }
+          }}
+          style={{ 
+            willChange: "transform",
+            transformOrigin: "center center"
+          }}
+        >
+          <ServiceCard
+            icon={icon}
+            title={title}
+            description={description}
+          />
+        </m.div>
+      ))}
+    </m.div>
+  );
+});
+
+// Botón móvil memoizado
+const MobileButton = memo(() => {
+  const mobileButtonVariants: Variants = {
+    hidden: { 
+      opacity: 0, 
+      y: 30,
+      scale: 0.9
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: {
+        type: "spring",
+        stiffness: 150,
+        damping: 15,
+        delay: 0.8
+      }
+    }
+  };
+
+  return (
+    <m.div
+      variants={mobileButtonVariants}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.8 }}
+      className="sm:hidden mt-8 flex justify-center lg:justify-start"
+    >
+      <m.div
+        whileHover={{ 
+          scale: 1.05, 
+          y: -2,
+          transition: { type: "spring", stiffness: 400, damping: 10 }
+        }}
+        whileTap={{ scale: 0.95 }}
+        style={{ willChange: "transform" }}
+      >
+        <Button size="md" label="Solicitar catálogo completo">
+          Solicitar catálogo completo
+        </Button>
+      </m.div>
+    </m.div>
+  );
+});
 
 const ServicesSection = () => {
+  const sectionRef = useRef(null);
+
   return (
-    <section id="services" className="relative w-full h-auto flex items-center py-24">
-      {/* Imagen lazy */}
-      <LazyLoadImage
-        src={imgBodySrc}
-        alt="Fondo de ilustracion para seccion servicios" //effect="blur"
-        className="absolute inset-0 w-full h-full object-cover object-center -z-10"
-      />
-      <div className="absolute inset-0 bg-black/10 bg-opacity-90 -z-5" />
+    <LazyMotion features={domAnimation}>
+      <m.section
+        ref={sectionRef}
+        id="services"
+        variants={sectionVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.1 }}
+        className="relative w-full h-auto flex items-center py-24 overflow-hidden"
+      >
+        <div className="container mx-auto px-6 md:px-16 lg:px-20 grid grid-cols-1 lg:grid-cols-2 gap-8 xl:gap-16">
+          
+          {/* Contenido principal */}
+          <ServicesContent />
 
-      <div className="container mx-auto px-6 md:px-16 lg:px-20 grid grid-cols-1 lg:grid-cols-2 gap-8 xl:gap-16">
-        {/* Contenido principal */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.4 }}
-          className="flex flex-col justify-center text-center lg:text-left"
-        >
-          <motion.div variants={fadeUp}>
-            <BadgeComponent text="Nuestros servicios" />
-          </motion.div>
+          {/* Grid de servicios */}
+          <ServicesGrid />
 
-          <motion.h2
-            variants={fadeUp}
-            className="mt-2 xl:mt-6 text-3xl sm:text-4xl xl:text-5xl font-extrabold leading-tight drop-shadow-xl"
-          >
-            Más que prendas,{" "}
-            <span className="text-primary">experiencias tejidas</span> para
-            ti y tu familia
-          </motion.h2>
-
-          <motion.p
-            variants={fadeRight}
-            className="mt-6 max-w-xl mx-auto lg:mx-0 text-sm text-textlight/70 sm:text-base leading-relaxed opacity-90"
-          >
-            Cada servicio que ofrecemos nace del mismo propósito: llevar
-            calidez, identidad y estilo auténtico a tu vida. Ya sea un detalle
-            especial o un pedido a gran escala, lo hacemos con dedicación desde
-            Potosí.
-          </motion.p>
-
-          <motion.div
-            variants={fadeUp}
-            className="hidden mt-8 sm:flex justify-center lg:justify-start"
-          >
-            <Button size="md" label="Solicitar catálogo completo">
-              Solicitar catálogo completo
-            </Button>
-          </motion.div>
-        </motion.div>
-
-        {/* Cards de servicios */}
-        <motion.div
-          variants={containerVariants}
-          className="grid grid-cols-1 sm:grid-cols-2 gap-3 xl:gap-8"
-        >
-          {[
-            {
-              icon: iconTresSrc,
-              title: "Producción a Medida",
-              description: "De Uniformes a Moda en Lana",
-            },
-            {
-              icon: iconDosSrc,
-              title: "Diseño Textil Único",
-              description: "Patrones y Acabados Exclusivos",
-            },
-            {
-              icon: iconUnoSrc,
-              title: "Calidad Impecable",
-              description: "Inspección Minuciosa en Cada Prenda",
-            },
-            {
-              icon: iconUnoSrc,
-              title: "Entrega Garantizada",
-              description: "Distribución Rápida y Segura",
-            },
-          ].map(({ icon, title, description }, i) => (
-            <motion.div key={i} variants={fadeUp}>
-              <ServiceCard
-                icon={icon}
-                title={title}
-                description={description}
-              />
-            </motion.div>
-          ))}
-        </motion.div>
-
-        <motion.div
-            variants={fadeUp}
-            className="sm:hidden mt-8 flex justify-center lg:justify-start"
-          >
-            <Button size="md" label="Solicitar catálogo completo">
-              Solicitar catálogo completo
-            </Button>
-          </motion.div>
-      </div>
-    </section>
+          {/* Botón móvil */}
+          <MobileButton />
+        </div>
+      </m.section>
+    </LazyMotion>
   );
 };
 

@@ -8,6 +8,7 @@ import { logEvent } from "@/analytics";
 const navLinks = [
   { to: "home", label: "Inicio" },
   { to: "about", label: "Sobre Nosotros" },
+  { to: "services", label: "Servicios" },
   { to: "gallery", label: "Galería" },
   { to: "testimonials", label: "Testimonios" },
   { to: "contact", label: "Contacto" },
@@ -46,7 +47,7 @@ export default function Navbar() {
                 smooth={true}
                 duration={600}
                 spy={true}
-                offset={-80}
+                offset={-10}
                 activeClass="text-primary font-bold"
                 className="cursor-pointer hover:text-primary transition-colors duration-300"
               >
